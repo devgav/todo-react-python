@@ -1,5 +1,7 @@
 #Added by User
 todo-env/
+todo_backend/venv
+todo_backend/.env
 .idea
 # Byte-compiled / optimized / DLL files
 __pycache__/
