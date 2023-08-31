@@ -1,6 +1,5 @@
 from rest_framework import viewsets, permissions
-
-from authorization.permissions import IsOwnerOrReadOnly
+from authorization.permissions import IsOwner
 from todo.models import Todo
 from todo.serializers import TodoSerializer
 
@@ -10,8 +9,8 @@ class TodoViewSet(viewsets.ModelViewSet):
     serializer_class = TodoSerializer
 
     permission_classes = (
-        permissions.IsAuthenticatedOrReadOnly,
-        IsOwnerOrReadOnly
+        permissions.IsAuthenticated,
+        IsOwner
     )
 
     def perform_create(self, serializer):

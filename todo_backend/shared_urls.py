@@ -9,5 +9,5 @@ router.register(r'user', UserViewSet)
 router.register(r'todo', TodoViewSet)
 
 urlpatterns = [
-    path('', include(router.urls))
+    path('', include(router.urls)),
 ]
