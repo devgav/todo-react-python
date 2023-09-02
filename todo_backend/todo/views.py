@@ -1,5 +1,5 @@
 from rest_framework import viewsets, permissions
-from authorization.permissions import IsOwner
+from todo.permissions import IsOwner
 from todo.models import Todo
 from todo.serializers import TodoSerializer
 

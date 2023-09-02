@@ -1,4 +1,4 @@
-import datetime
+from django.contrib.auth.models import User
 from django.db import models
 
 
@@ -7,7 +7,7 @@ class Todo(models.Model):
     description = models.TextField(max_length=500, blank=True)
     created = models.DateTimeField(auto_now_add=True)
     completed = models.BooleanField(default=False)
-    owner = models.ForeignKey('auth.User', on_delete=models.CASCADE)
+    owner = models.ForeignKey(to=User, related_name='todo', on_delete=models.CASCADE)
 
     class Meta:
         ordering = ('created',)
