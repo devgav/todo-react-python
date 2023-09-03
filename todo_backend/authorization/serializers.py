@@ -6,14 +6,6 @@ from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 UserModel = get_user_model()
 
 
-class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
-    @classmethod
-    def get_token(cls, user):
-        token = super().get_token(user)
-        token['username'] = user.username
-        return token
-
-
 class UserSerializer(serializers.HyperlinkedModelSerializer):
     todo = serializers.HyperlinkedRelatedField(many=True, view_name='todo-detail', read_only=True)
 
