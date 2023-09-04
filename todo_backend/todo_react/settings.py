@@ -71,6 +71,7 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     "corsheaders.middleware.CorsMiddleware",
+    "middlewares.middleware.DefaultHeaderMiddleware"
 ]
 
 ROOT_URLCONF = 'todo_react.urls'
