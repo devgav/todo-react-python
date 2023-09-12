@@ -5,10 +5,12 @@ import { useState } from "react";
 import { DateTimePicker } from "@mantine/dates";
 import { useForm } from "@mantine/form";
 import Todo from "@/app/todo/todo";
+import { useStyles } from "@/app/todo/useStyles";
 
 export default function Todos() {
     const [value, setValue] = useState(null);
     const [isError, setError] = useState(false);
+    const { classes, theme } = useStyles(undefined, undefined);
     const form = useForm({
         initialValues: {
             date: '',
@@ -34,13 +36,15 @@ export default function Todos() {
                     <Paper shadow="md" p="md">
                         <Group>
                             <TextInput
-                                miw={500}
+                                w={500}
+                                className={classes.todoMobile}
                                 placeholder="Your amazing task... "
                             />
                             <DateTimePicker
                                 clearable
-                                valueFormat="MMM DD YYYY hh:mm A"
-                                miw={150}
+                                valueFormat="MM/DD/YYYY hh:mm A"
+                                className={classes.todoMobile}
+                                w={200}
                                 mt={isError ? 17 : 0}
                                 defaultValue={new Date()}
                                 placeholder="Deadline"
