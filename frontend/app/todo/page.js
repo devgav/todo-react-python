@@ -1,64 +1,42 @@
 "use client"
-import FullContainer from "@/app/components/(mantine)/fullContainer";
-import { Box, Button, Group, Paper, TextInput, Text, Container, Grid, SimpleGrid, Center } from "@mantine/core";
-import { useState } from "react";
-import { DateTimePicker } from "@mantine/dates";
-import { useForm } from "@mantine/form";
+import { Box, Paper, Container, SimpleGrid, Center } from "@mantine/core";
 import Todo from "@/app/todo/todo";
 import { useStyles } from "@/app/todo/useStyles";
+import { useViewportSize } from "@mantine/hooks";
+import TodoForm from "@/app/components/(mantine)/TodoForm";
 
 export default function Todos() {
-    const [value, setValue] = useState(null);
-    const [isError, setError] = useState(false);
-    const { classes, theme } = useStyles(undefined, undefined);
-    const form = useForm({
-        initialValues: {
-            date: '',
-        },
-
-        validate: {
-            date: (value) => {
-                const now = new Date();
-                if (now > value) {
-                    setError(true)
-                    return "This date is in the past"
-                }
-                setError(false)
-                return null
-            },
-        },
-        validateInputOnChange: true
-    });
+    const { classes } = useStyles(undefined, undefined);
+    const { height, width } = useViewportSize();
+    const length = () => {
+        const a = []
+        for(let i = 0; i < 10; i++) {
+            a.push(i);
+        }
+        return a;
+    }
     return (
         <Box mt={30}>
             <Container>
                 <SimpleGrid>
-                    <Paper shadow="md" p="md">
-                        <Group>
-                            <TextInput
-                                w={500}
-                                className={classes.todoMobile}
-                                placeholder="Your amazing task... "
-                            />
-                            <DateTimePicker
-                                clearable
-                                valueFormat="MM/DD/YYYY hh:mm A"
-                                className={classes.todoMobile}
-                                w={200}
-                                mt={isError ? 17 : 0}
-                                defaultValue={new Date()}
-                                placeholder="Deadline"
-                                mx="auto"
-                                {...form.getInputProps('date')}
-                            />
-                            <Button>Create New Todo</Button>
-                        </Group>
-                    </Paper>
-                    <Paper shadow="md" p="md">
+                    <TodoForm 
+                        className={classes.todoMobile} 
+                    />
+                    <Paper shadow="md" p="md" mb={20}>
                         <Center>
-                            <Text size="lg">No Todo</Text>
+                            <SimpleGrid cols={1}>
+                                {
+                                    length().map((index) => (
+                                        <Todo task="Some task 1asdfasdfasdfasdfasdf"
+                                              key={index}
+                                              deadline="09/22/2023 12:00AM"
+                                              viewPortSize={{height, width}}
+                                              
+                                        />
+                                    ))
+                                }
+                            </SimpleGrid>
                         </Center>
-                        <Todo/>
                     </Paper>
                 </SimpleGrid>
             </Container>

@@ -6,4 +6,12 @@ export const useStyles = createStyles((theme) => ({
             width: '400px',
         },
     },
+    todoTaskMobile: {
+        [theme.fn.smallerThan('sm')]: {
+            width: '300px',
+        },
+    },
+    todoPointer : {
+        cursor: "pointer"
+    },
 }));

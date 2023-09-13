@@ -18,3 +18,29 @@ export const passwordErrors = (password) => {
         return errors;
     }
 }
+
+export const todoForm = (setDateError, task="", date="") =>(
+    {
+        initialValues: {
+            task,
+            date
+        },
+
+        validate: {
+            date: (value) => {
+                const now = new Date();
+                if (now > value && value !== "") {
+                    setDateError(true)
+                    return "This date is in the past"
+                }
+                setDateError(false)
+                return null
+            },
+        },
+        validateInputOnChange: true,
+    }
+)
+
+export  const isSmallScreen = (viewPortSize) => {
+    return viewPortSize.height <= 900 && viewPortSize.width <= 420;
+}

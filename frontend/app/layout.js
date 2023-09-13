@@ -21,7 +21,7 @@ export default function RootLayout({ children, fontWeight }) {
     return (
         <>
             <html lang="en">
-                <body >
+                <body suppressHydrationWarning={true}>
                     <RootStyleRegistry>
                         <Navigation/>
                         {children}
