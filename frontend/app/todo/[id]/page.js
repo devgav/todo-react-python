@@ -9,7 +9,7 @@ export default function TodoCreate() {
                 <Group>
                     <Button>Create New Todo</Button>
                 </Group>
-                <h1>Create New Todo</h1>
+                <h1>Individual todo</h1>
             </Box>
         </FullContainer>
     )

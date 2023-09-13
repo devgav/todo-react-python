@@ -5,7 +5,7 @@ import { useStyles } from "@/app/todo/useStyles";
 import { useViewportSize } from "@mantine/hooks";
 import TodoForm from "@/app/components/(mantine)/TodoForm";
 
-export default function Todos() {
+export default function TodoList() {
     const { classes } = useStyles(undefined, undefined);
     const { height, width } = useViewportSize();
     const length = () => {

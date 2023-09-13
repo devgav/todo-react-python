@@ -4,8 +4,10 @@ import { useStyles } from "@/app/todo/useStyles";
 import TodoForm from "@/app/components/(mantine)/TodoForm";
 import { isSmallScreen } from "@/app/utilities/utilities";
 import { useDisclosure } from "@mantine/hooks";
+import { useRouter } from "next/navigation";
 
 export default function Todo({ task, viewPortSize, deadline }) {
+    const router = useRouter();
     const { classes } = useStyles(undefined, undefined);
     const [todoOpened, { toggle: todoToggleHandler }] = useDisclosure(true);
     function taskClipper(task) {
@@ -25,11 +27,16 @@ export default function Todo({ task, viewPortSize, deadline }) {
         console.log("edit clicked")
     }
     
+    function onTaskView(e) {
+        e.preventDefault();
+        router.push('/todo/[id]');
+    }
+    
     return (
         <Box className={classes.todoPointer} >
             {
                 todoOpened ?  (
-                    <Paper onDoubleClick={() => console.log("you just double clicked")} shadow="sm" p="md" w={850} className={classes.todoTaskMobile}>
+                    <Paper onDoubleClick={onTaskView} shadow="sm" p="md" w={850} className={classes.todoTaskMobile}>
                         <Group position="apart" grow>
                             <Text>{ taskClipper(task) }</Text>
                             {
