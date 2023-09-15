@@ -1,4 +1,4 @@
-export const passwordErrors = (password) => {
+const passwordErrors = (password) => {
     const errors = [];
     const symbolRegex = /[!@#$%^&*()_+{}\[\]:;<>,.?~\\-]/;
     const numberRegex = /[0-9]/;
@@ -19,7 +19,24 @@ export const passwordErrors = (password) => {
     }
 }
 
-export const todoForm = (setDateError, task="", date="") =>(
+export const userValidation = (validatePassword = true) => {
+    return {
+        initialValues: {
+            email: '',
+                password: '',
+        },
+
+        validate: {
+            email: (value) => (/^\S+@\S+$/.test(value) ? null : 'Invalid email'),
+            password: (value) => {
+                return validatePassword ? passwordErrors(value) : null
+            },
+        },
+        validateInputOnChange: true
+    }
+}
+
+export const todoValidation = (setDateError, task="", date="") =>(
     {
         initialValues: {
             task,

@@ -25,16 +25,18 @@ export default function TodoList() {
                     <Paper shadow="md" p="md" mb={20}>
                         <Center>
                             <SimpleGrid cols={1}>
-                                {
-                                    length().map((index) => (
-                                        <Todo task="Some task 1asdfasdfasdfasdfasdf"
-                                              key={index}
-                                              deadline="09/22/2023 12:00AM"
-                                              viewPortSize={{height, width}}
-                                              
-                                        />
-                                    ))
-                                }
+                                <>
+                                    {
+                                        length().map((index) => (
+                                            <Todo task="Some task 1asdfasdfasdfasdfasdf"
+                                                  key={index}
+                                                  deadline="09/22/2023 12:00AM"
+                                                  viewPortSize={{height, width}}
+
+                                            />
+                                        ))
+                                    }                         
+                                </>
                             </SimpleGrid>
                         </Center>
                     </Paper>

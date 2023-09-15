@@ -1,25 +1,30 @@
-"use client"
-import { Box, Button, Flex, Group, Paper, PasswordInput, TextInput, Text } from "@mantine/core";
+"use client";
+import { Box, Button, Group, Paper, PasswordInput, Text, TextInput } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { useRouter } from "next/navigation";
 import FullContainer from "@/app/components/(mantine)/fullContainer";
+import { userValidation } from "@/app/utilities/utilities";
+import { usePostLoginUserMutation } from "@/features/apiSlice";
+import { useSelector } from "react-redux";
 
 export default function Login() {
     const router = useRouter();
-    const form = useForm({
-        initialValues: {
-            email: '',
-            password: '',
-        },
-
-        validate: {
-            email: (value) => (/^\S+@\S+$/.test(value) ? null : 'Invalid email'),            
-            password: (value) => (value.length === 0) ? 'No password entered' : null,
-        },
-        validateInputOnChange: true
+    const form = useForm(userValidation(false));
+    const [postLoginUser, { isLoading }] = usePostLoginUserMutation();
+    const s = useSelector(state => state.userLoggedIn)
+    const loginFormSubmission = form.onSubmit(async ({ email, password}) => {
+        if (form.isValid) {
+            try {
+                console.log("Logging in user");
+                const payload = await postLoginUser({ username: email, password}).unwrap();
+                console.log("this is the payload", payload);
+                localStorage.setItem('refresh_key', payload.refresh);
+            } catch (e) {
+                window.postMessage(`Error trying to login user ${e}`);
+                console.log('Error trying to login user', e);
+            }         
+        }
     });
-    
-    
     return (
         <FullContainer h={600} mah={700}>
             <Box w={400}>
@@ -33,13 +38,7 @@ export default function Login() {
                     >
                         Login
                     </Text>
-                    <form onSubmit={form.onSubmit((values) => {
-                        if (form.isValid) {
-                            console.log(values.email);
-                            console.log(values.password);
-                            router.push("/todo")
-                        }
-                    })}>
+                    <form onSubmit={loginFormSubmission}>
                         <TextInput
                             withAsterisk
                             required

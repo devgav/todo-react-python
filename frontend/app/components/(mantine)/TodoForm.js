@@ -2,12 +2,12 @@ import { Button, Center, Group, Paper, TextInput } from "@mantine/core";
 import DeadlineDatePicker from "@/app/components/(mantine)/DeadlineDatePicker";
 import { IconDeviceFloppy } from "@tabler/icons-react";
 import { useForm } from "@mantine/form";
-import { todoForm } from "@/app/utilities/utilities";
+import { todoValidation } from "@/app/utilities/utilities";
 import { useState } from "react";
 
 export default function TodoForm({  className, create = true, closeEdit }) {
     const [isDateError, setDateError] = useState(false);
-    const form = useForm(todoForm(setDateError));
+    const form = useForm(todoValidation(setDateError));
 
     return (
         <Paper shadow="md" p="md">

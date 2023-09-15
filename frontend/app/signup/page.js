@@ -1,25 +1,24 @@
 "use client"
 import { Box, Button, Center, Flex, Group, Header, Paper, PasswordInput, TextInput, Text } from "@mantine/core";
 import { useForm } from "@mantine/form";
-import { passwordErrors } from "@/app/utilities/utilities";
+import { userValidation } from "@/app/utilities/utilities";
 import FullContainer from "@/app/components/(mantine)/fullContainer";
+import { usePostCreateUserMutation } from "@/features/apiSlice";
 
 export default function SignUp() {
-    const form = useForm({
-        initialValues: {
-            email: '',
-            password: '',
-        },
-
-        validate: {
-            email: (value) => (/^\S+@\S+$/.test(value) ? null : 'Invalid email'),
-            password: (value) => {
-                return passwordErrors(value)
-            },
-        },
-        validateInputOnChange: true
-    });
-
+    const form = useForm(userValidation());
+    const [postCreateUser, { isLoading }] = usePostCreateUserMutation();
+    const createUserFormSubmission = form.onSubmit(async ({ email, password}) => {
+        if (form.isValid) {
+            try {
+                const payload = await postCreateUser({ username: email, password }).unwrap();
+                localStorage.setItem('refresh_key', payload.refresh)
+            } catch(e) {
+                window.postMessage(`Error trying to login user ${e}`);
+                console.log('Error trying to login user', e);      
+            }
+        }
+    })
 
     return (
         <FullContainer h={600} mah={700}>
@@ -34,7 +33,7 @@ export default function SignUp() {
                     >
                         Create Account
                     </Text>
-                    <form onSubmit={form.onSubmit((values) => console.log(values))}>
+                    <form onSubmit={createUserFormSubmission}>
                         <TextInput
                             withAsterisk
                             required

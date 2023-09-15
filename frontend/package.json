@@ -25,6 +25,7 @@
     "@mantine/prism": "^6.0.20",
     "@mantine/spotlight": "^6.0.20",
     "@mantine/tiptap": "^6.0.20",
+    "@reduxjs/toolkit": "^1.9.5",
     "@tabler/icons-react": "^2.33.0",
     "@tiptap/extension-link": "^2.1.8",
     "@tiptap/react": "^2.1.8",
@@ -38,6 +39,7 @@
     "next": "13.4.19",
     "prop-types": "^15.8.1",
     "react": "18.2.0",
-    "react-dom": "18.2.0"
+    "react-dom": "18.2.0",
+    "react-redux": "^8.1.2"
   }
 }
