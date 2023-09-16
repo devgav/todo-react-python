@@ -14,12 +14,19 @@ import {
 import { useDisclosure } from '@mantine/hooks';
 import Link from "next/link";
 import { useStyles } from "@/app/components/(navbar)/useStyles";
+import { useDispatch, useSelector } from 'react-redux';
+import { userSelector } from '@/features/user/userSlice';
 
 
 export function Navigation() {
     const [drawerOpened, { toggle: toggleDrawer, close: closeDrawer }] = useDisclosure(false);
+    const isLoggedIn = useSelector(userSelector)
     const { classes, theme } = useStyles(undefined, undefined);
+    const dispatch = useDispatch();
+    function userLogout() {
 
+      localStorage.removeItem('refresh_key');
+    }
     return (
         <Box>
             <Header height={60} px="md">

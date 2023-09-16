@@ -4,18 +4,27 @@ import { useForm } from "@mantine/form";
 import { userValidation } from "@/app/utilities/utilities";
 import FullContainer from "@/app/components/(mantine)/fullContainer";
 import { usePostCreateUserMutation } from "@/features/apiSlice";
+import { useRouter } from 'next/navigation';
+import { useDispatch, useSelector } from 'react-redux';
+import { userLoginState, userSelector } from '@/features/user/userSlice';
 
 export default function SignUp() {
+    const userLoggedIn = useSelector(userSelector);
     const form = useForm(userValidation());
+    const router = useRouter();
     const [postCreateUser, { isLoading }] = usePostCreateUserMutation();
+    const dispatch = useDispatch();
+    console.log(userLoggedIn + " Before click: ")
     const createUserFormSubmission = form.onSubmit(async ({ email, password}) => {
         if (form.isValid) {
             try {
                 const payload = await postCreateUser({ username: email, password }).unwrap();
-                localStorage.setItem('refresh_key', payload.refresh)
+                localStorage.setItem('refresh_key', payload.refresh);
+                router.push('/todo');
             } catch(e) {
-                window.postMessage(`Error trying to login user ${e}`);
-                console.log('Error trying to login user', e);      
+                dispatch(userLoginState(true));
+                console.log(userLoggedIn + " After click: ")
+                console.log('Error trying to login user', e);
             }
         }
     })

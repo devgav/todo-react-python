@@ -19,19 +19,21 @@ export const inter = Inter({
 
 export default function RootLayout({ children, fontWeight }) {
     inter.weight = fontWeight
-    
+    // Check local storage for refresh token
+  // if refresh token has 201 response route to /todo page
+  // else route to home page.
     return (
         <>
-            <Provider store={store}>
-                <html lang="en">
-                    <body suppressHydrationWarning={true}>
-                        <RootStyleRegistry>
-                            <Navigation/>
-                            {children}
-                        </RootStyleRegistry>
-                    </body>
-                </html>
-            </Provider>
+        <Provider store={store}>
+            <html lang="en">
+                <body suppressHydrationWarning={true}>
+                      <RootStyleRegistry>
+                          <Navigation/>
+                          {children}
+                      </RootStyleRegistry>
+                </body>
+            </html>
+        </Provider>
         </>
     )
 }

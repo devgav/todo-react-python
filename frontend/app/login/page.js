@@ -6,12 +6,13 @@ import FullContainer from "@/app/components/(mantine)/fullContainer";
 import { userValidation } from "@/app/utilities/utilities";
 import { usePostLoginUserMutation } from "@/features/apiSlice";
 import { useSelector } from "react-redux";
+import { userLoginState } from '@/features/user/userSlice';
 
 export default function Login() {
     const router = useRouter();
     const form = useForm(userValidation(false));
     const [postLoginUser, { isLoading }] = usePostLoginUserMutation();
-    const s = useSelector(state => state.userLoggedIn)
+    const isLoggedIn = useSelector(userLoginState)
     const loginFormSubmission = form.onSubmit(async ({ email, password}) => {
         if (form.isValid) {
             try {
@@ -19,8 +20,8 @@ export default function Login() {
                 const payload = await postLoginUser({ username: email, password}).unwrap();
                 console.log("this is the payload", payload);
                 localStorage.setItem('refresh_key', payload.refresh);
+                router.push('/todo');
             } catch (e) {
-                window.postMessage(`Error trying to login user ${e}`);
                 console.log('Error trying to login user', e);
             }         
         }

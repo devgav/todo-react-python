@@ -1,6 +1,6 @@
 "use client"
 
-import {
+import  {
     BackgroundImage,
     Box, Button,
     Center,
@@ -16,7 +16,7 @@ import { useStyles } from "@/app/useStyles";
 
 
 export default function Home() {
-    const { classes, theme } = useStyles(undefined, undefined)
+    const { classes } = useStyles(undefined, undefined)
     return (
         <Box className={classes.screenFormat}>
             <BackgroundImage
