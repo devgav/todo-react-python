@@ -5,21 +5,20 @@ import { useRouter } from "next/navigation";
 import FullContainer from "@/app/components/(mantine)/fullContainer";
 import { userValidation } from "@/app/utilities/utilities";
 import { usePostLoginUserMutation } from "@/features/apiSlice";
-import { useSelector } from "react-redux";
-import { userLoginState } from '@/features/user/userSlice';
+import { useDispatch } from "react-redux";
+import { userLoginState } from "@/features/user/userSlice";
 
 export default function Login() {
     const router = useRouter();
     const form = useForm(userValidation(false));
     const [postLoginUser, { isLoading }] = usePostLoginUserMutation();
-    const isLoggedIn = useSelector(userLoginState)
+    const dispatch = useDispatch();
     const loginFormSubmission = form.onSubmit(async ({ email, password}) => {
         if (form.isValid) {
             try {
-                console.log("Logging in user");
                 const payload = await postLoginUser({ username: email, password}).unwrap();
-                console.log("this is the payload", payload);
                 localStorage.setItem('refresh_key', payload.refresh);
+                dispatch(userLoginState(true));
                 router.push('/todo');
             } catch (e) {
                 console.log('Error trying to login user', e);

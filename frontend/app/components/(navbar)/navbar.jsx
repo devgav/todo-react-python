@@ -15,17 +15,17 @@ import { useDisclosure } from '@mantine/hooks';
 import Link from "next/link";
 import { useStyles } from "@/app/components/(navbar)/useStyles";
 import { useDispatch, useSelector } from 'react-redux';
-import { userSelector } from '@/features/user/userSlice';
+import { userLoginState, userSelector } from "@/features/user/userSlice";
 
 
 export function Navigation() {
     const [drawerOpened, { toggle: toggleDrawer, close: closeDrawer }] = useDisclosure(false);
-    const isLoggedIn = useSelector(userSelector)
+    const userLoggedIn = useSelector(userSelector)
     const { classes, theme } = useStyles(undefined, undefined);
     const dispatch = useDispatch();
     function userLogout() {
-
-      localStorage.removeItem('refresh_key');
+        dispatch(userLoginState(false));
+        localStorage.removeItem('refresh_key');
     }
     return (
         <Box>
@@ -41,12 +41,22 @@ export function Navigation() {
                     </Link>
 
                     <Group className={classes.hiddenMobile}>
-                        <Link href="/login" passHref>
-                            <Button variant="default">Log in</Button>
-                        </Link>
-                        <Link href="/signup" passHref>
-                            <Button>Sign up</Button>
-                        </Link>
+                        {
+                            userLoggedIn ? (
+                                <Link href="/" passHref>
+                                    <Button variant="default" onClick={userLogout}>Log out</Button>
+                                </Link>
+                            ) : (
+                                <>
+                                    <Link href="/login" passHref>
+                                        <Button variant="default">Log in</Button>
+                                    </Link>
+                                    <Link href="/signup" passHref>
+                                        <Button>Sign up</Button>
+                                    </Link>
+                                </>
+                            )
+                        }
                     </Group>
                     
                     <Burger opened={drawerOpened} onClick={toggleDrawer} className={classes.hiddenDesktop} />
@@ -66,8 +76,16 @@ export function Navigation() {
                     <Divider my="sm" color={theme.colorScheme === 'dark' ? 'dark.5' : 'gray.1'} />
 
                     <Group position="center" grow pb="xl" px="md">
-                        <Button component="a" href="/login" variant="default">Login</Button>
-                        <Button component="a" href="/signup">Sign up</Button>
+                        {
+                            userLoggedIn ? (
+                                <Button component="a" href="/" variant="default" onClick={userLogout}>Log Out</Button>
+                            ) : (
+                                <>
+                                    <Button component="a" href="/login" variant="default">Login</Button>
+                                    <Button component="a" href="/signup">Sign up</Button>
+                                </>
+                            )
+                        }
                     </Group>
                 </ScrollArea>
             </Drawer>
