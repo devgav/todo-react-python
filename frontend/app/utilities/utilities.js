@@ -1,3 +1,6 @@
+import { useDispatch } from "react-redux";
+import { useGetTodosMutation, usePostLoginUserMutation, usePostRefreshTokenMutation } from "@/features/apiSlice";
+
 const passwordErrors = (password) => {
     const errors = [];
     const symbolRegex = /[!@#$%^&*()_+{}\[\]:;<>,.?~\\-]/;
@@ -60,4 +63,28 @@ export const todoValidation = (setDateError, task="", date="") =>(
 
 export  const isSmallScreen = (viewPortSize) => {
     return viewPortSize.height <= 900 && viewPortSize.width <= 420;
+}
+
+
+async function checkValidKey() {
+    const access = localStorage.getItem('access_key');
+    const refresh = localStorage.getItem('refresh_key');
+    try {
+        const response = await usePostRefreshTokenMutation({ refresh });
+    } catch(e) {
+        
+    }
+}
+export const addAuthToBody = async (body) => {
+    const accessKey = localStorage.getItem("access_key");
+    if (accessKey) {
+        try {
+            
+             const payload = await useGetTodosMutation({ ...body, authToken: localStorage.getItem('access_key') });
+             await Promise.resolve(payload);
+        } catch (e) {
+            console.log('There was an error', e);
+        }
+    }
+    return body;
 }

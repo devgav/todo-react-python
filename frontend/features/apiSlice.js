@@ -23,6 +23,26 @@ export const apiSlice = createApi({
             }),
             providesTags: ['users']
         }),
+        postRefreshToken: builder.mutation({
+            query: userData => ({
+                method: 'POST',
+                url: 'api/token/refresh/',
+                body: userData,
+            }),
+            providesTags: ['users']
+        }),
+        getTodos: builder.mutation({
+            query: userData => ({
+                method: 'POST',
+                url: 'api/token/',
+                body: userData,
+                prepareHeaders: (headers) => {
+                    headers.set('Authorization', userData)
+                    return headers;
+                }
+            }),
+            providesTags: ['users']
+        }),
     })
 })
 
@@ -30,4 +50,6 @@ export const apiSlice = createApi({
 export const { 
     usePostCreateUserMutation,
     usePostLoginUserMutation,
+    usePostRefreshTokenMutation,
+    useGetTodosMutation,
 } = apiSlice

@@ -26,6 +26,7 @@ export function Navigation() {
     function userLogout() {
         dispatch(userLoginState(false));
         localStorage.removeItem('refresh_key');
+        localStorage.removeItem('access_key');
     }
     return (
         <Box>

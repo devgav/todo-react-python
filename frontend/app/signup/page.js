@@ -18,6 +18,7 @@ export default function SignUp() {
             try {
                 const payload = await postCreateUser({ username: email, password }).unwrap();
                 localStorage.setItem('refresh_key', payload.refresh);
+                localStorage.setItem('access_key', payload.access);
                 dispatch(userLoginState(true));
                 router.push('/todo');
             } catch(e) {
