@@ -1,31 +1,31 @@
-"use client"
-import { Box, Button, Center, Flex, Group, Header, Paper, PasswordInput, TextInput, Text } from "@mantine/core";
+"use client";
+import { Box, Button, Group, Paper, PasswordInput, Text, TextInput } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { userValidation } from "@/app/utilities/utilities";
 import FullContainer from "@/app/components/(mantine)/fullContainer";
 import { usePostCreateUserMutation } from "@/features/apiSlice";
-import { useRouter } from 'next/navigation';
-import { useDispatch, useSelector } from 'react-redux';
-import { userLoginState, userSelector } from '@/features/user/userSlice';
+import { useRouter } from "next/navigation";
+import { useDispatch } from "react-redux";
+import { authTokenUpdate, refreshTokenUpdate, userLoginState } from "@/features/user/userSlice";
 
 export default function SignUp() {
     const form = useForm(userValidation());
     const router = useRouter();
-    const [postCreateUser, { isLoading }] = usePostCreateUserMutation();
+    const [postCreateUser] = usePostCreateUserMutation();
     const dispatch = useDispatch();
     const createUserFormSubmission = form.onSubmit(async ({ email, password}) => {
         if (form.isValid) {
             try {
                 const payload = await postCreateUser({ username: email, password }).unwrap();
-                localStorage.setItem('refresh_key', payload.refresh);
-                localStorage.setItem('access_key', payload.access);
+                dispatch(authTokenUpdate(payload.access));
+                dispatch(refreshTokenUpdate(payload.refresh));
                 dispatch(userLoginState(true));
                 router.push('/todo');
             } catch(e) {
                 console.log('Error trying to login user', e);
             }
         }
-    })
+    });
 
     return (
         <FullContainer h={600} mah={700}>

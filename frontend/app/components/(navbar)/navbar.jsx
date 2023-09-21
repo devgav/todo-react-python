@@ -15,7 +15,7 @@ import { useDisclosure } from '@mantine/hooks';
 import Link from "next/link";
 import { useStyles } from "@/app/components/(navbar)/useStyles";
 import { useDispatch, useSelector } from 'react-redux';
-import { userLoginState, userSelector } from "@/features/user/userSlice";
+import { authTokenUpdate, refreshTokenUpdate, userLoginState, userSelector } from "@/features/user/userSlice";
 
 
 export function Navigation() {
@@ -25,8 +25,8 @@ export function Navigation() {
     const dispatch = useDispatch();
     function userLogout() {
         dispatch(userLoginState(false));
-        localStorage.removeItem('refresh_key');
-        localStorage.removeItem('access_key');
+        dispatch(authTokenUpdate(''));
+        dispatch(refreshTokenUpdate(''));
     }
     return (
         <Box>

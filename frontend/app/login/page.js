@@ -6,7 +6,7 @@ import FullContainer from "@/app/components/(mantine)/fullContainer";
 import { userValidation } from "@/app/utilities/utilities";
 import { usePostLoginUserMutation } from "@/features/apiSlice";
 import { useDispatch } from "react-redux";
-import { userLoginState } from "@/features/user/userSlice";
+import { authTokenUpdate, refreshTokenUpdate, userLoginState } from "@/features/user/userSlice";
 
 export default function Login() {
     const router = useRouter();
@@ -17,8 +17,8 @@ export default function Login() {
         if (form.isValid) {
             try {
                 const payload = await postLoginUser({ username: email, password}).unwrap();
-                localStorage.setItem('refresh_key', payload.refresh);
-                localStorage.setItem('access_key', payload.access);                
+                dispatch(authTokenUpdate(payload.access));
+                dispatch(refreshTokenUpdate(payload.refresh));    
                 dispatch(userLoginState(true));
                 router.push('/todo');
             } catch (e) {
@@ -28,7 +28,7 @@ export default function Login() {
     });
     return (
         <FullContainer h={600} mah={700}>
-            <Box w={400}>
+            <Box w={400}> 
                 <Paper radius="sm" shadow="lg" p="md" withBorder>
                     <Text
                         variant="gradient"

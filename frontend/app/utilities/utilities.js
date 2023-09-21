@@ -1,5 +1,6 @@
-import { useDispatch } from "react-redux";
-import { useGetTodosMutation, usePostLoginUserMutation, usePostRefreshTokenMutation } from "@/features/apiSlice";
+import { useSelector } from "react-redux";
+import { usePostRefreshTokenMutation } from "@/features/apiSlice";
+import { userSelector } from "@/features/user/userSlice";
 
 const passwordErrors = (password) => {
     const errors = [];
@@ -67,24 +68,34 @@ export  const isSmallScreen = (viewPortSize) => {
 
 
 async function checkValidKey() {
-    const access = localStorage.getItem('access_key');
     const refresh = localStorage.getItem('refresh_key');
+    const tokenNotValid = "token_not_valid";
+    const userLoggedIn = useSelector(userSelector);
+    const finalResponse = {
+        validKey: true,
+        errorMessage: ''
+    }
     try {
-        const response = await usePostRefreshTokenMutation({ refresh });
+        if (userLoggedIn) {
+            const response = await usePostRefreshTokenMutation({ refresh });
+            if (response.code === tokenNotValid) {
+                finalResponse.validKey = false;
+                finalResponse.errorMessage = tokenNotValid;
+                return Promise.resolve({ finalResponse });
+            }
+            return Promise.resolve({ finalResponse });
+        } else {
+            finalResponse.validKey = false;
+            finalResponse.errorMessage = "User not logged in.";
+            return Promise.resolve({ finalResponse });
+        }
     } catch(e) {
-        
+        return Promise.reject(`Error ${e}`);
     }
 }
-export const addAuthToBody = async (body) => {
-    const accessKey = localStorage.getItem("access_key");
-    if (accessKey) {
-        try {
-            
-             const payload = await useGetTodosMutation({ ...body, authToken: localStorage.getItem('access_key') });
-             await Promise.resolve(payload);
-        } catch (e) {
-            console.log('There was an error', e);
-        }
-    }
-    return body;
+
+export function addQueryParam(paramName, paramValue) {
+    const searchParams = new URLSearchParams();
+    searchParams.set(paramName, paramValue);
+    return searchParams.toString() ? `?${searchParams.toString()}` : '';
 }

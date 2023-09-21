@@ -1,5 +1,5 @@
-import { Box, Group, Paper, Text } from "@mantine/core";
-import { IconPencil, IconTrash } from "@tabler/icons-react";
+import { Box, Checkbox, Group, Paper, Text } from "@mantine/core";
+import { IconEye, IconPencil, IconTrash } from "@tabler/icons-react";
 import { useStyles } from "@/app/todo/useStyles";
 import TodoForm from "@/app/components/(mantine)/TodoForm";
 import { isSmallScreen } from "@/app/utilities/utilities";
@@ -36,9 +36,9 @@ export default function Todo({ task, viewPortSize, deadline }) {
         <Box className={classes.todoPointer} >
             {
                 todoOpened ?  (
-                    <Paper onDoubleClick={onTaskView} shadow="sm" p="md" w={850} className={classes.todoTaskMobile}>
+                    <Paper shadow="sm" p="md" w={850} className={classes.todoTaskMobile}>
                         <Group position="apart" grow>
-                            <Text>{ taskClipper(task) }</Text>
+                            <Checkbox label={taskClipper(task)}  radius="lg"/>
                             {
                                 isSmallScreen(viewPortSize) ? null : (
                                     <Group position="right">
@@ -51,6 +51,7 @@ export default function Todo({ task, viewPortSize, deadline }) {
                             <Group position="right">
                                 <IconTrash color="red" onClick={onTrashClick}></IconTrash>
                                 <IconPencil onClick={onEditClick}/>
+                                <IconEye onClick={onTaskView}/>
                             </Group>
                         </Group>
                     </Paper>
