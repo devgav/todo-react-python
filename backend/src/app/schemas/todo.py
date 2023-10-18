@@ -8,7 +8,6 @@ from pydantic import BaseModel
 class TodoBase(BaseModel):
     title: Optional[str] = None
     description: Optional[str] = None
-    date_completed: Optional[datetime]
     completed: bool = False
 
 
