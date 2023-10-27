@@ -2,6 +2,7 @@ from fastapi import FastAPI
 from starlette.middleware.cors import CORSMiddleware
 
 from src.app.api.api_v1.api import api_router
+from src.app.core.settings import settings
 
 app = FastAPI(
     title='todo app'
@@ -16,4 +17,4 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-app.include_router(api_router)
+app.include_router(api_router, prefix=settings.API_V1_STR)

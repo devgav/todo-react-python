@@ -6,6 +6,7 @@ from fastapi.encoders import jsonable_encoder
 from pydantic import BaseModel
 from sqlalchemy.orm import Session
 
+from src.app.core.security import get_password_hash
 from src.app.db.base_class import Base
 
 ModelType = TypeVar("ModelType", bound=Base)

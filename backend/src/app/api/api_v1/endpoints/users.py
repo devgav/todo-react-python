@@ -1,4 +1,9 @@
-from fastapi import APIRouter
+from fastapi import APIRouter, Depends, HTTPException
+
+from src.app import models, crud
+from src.app.api import deps
+from src.app import schemas
+from sqlalchemy.orm import Session
 
 router = APIRouter()
 
@@ -23,6 +28,18 @@ def get_user(user_id: int):
         object: user
     """
     return {"user": f"Information about one one user {user_id}"}
+
+
+@router.post("/")
+def post_user(
+        *,
+        db: Session = Depends(deps.get_db),
+        user_in: schemas.UserCreate,
+):
+    """
+    Create new user.
+    """
+    return crud.user.create(db=db, obj_in=user_in)
 
 
 @router.delete("/{user_id}")

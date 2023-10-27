@@ -2,13 +2,13 @@ from typing import Any, Dict, Union
 
 from sqlalchemy.orm import Session
 
+from src.app.core.security import verify_password, get_password_hash
 from src.app.crud.base import CRUDBase
 from src.app.models.user import User
 from src.app.schemas.user import UserCreate, UserUpdate
 
 
 class CRUDUser(CRUDBase[User, UserCreate, UserUpdate]):
-
     def get_by_email(self, db: Session, *, email: str) -> User:
         return db.query(User).filter(User.email == email).first()
 
@@ -16,7 +16,6 @@ class CRUDUser(CRUDBase[User, UserCreate, UserUpdate]):
         db_obj = User(
             email=obj_in.email,
             hashed_password=obj_in.password + "hashed-password",
-            full_name=obj_in.full_name,
             is_superuser=obj_in.is_superuser,
         )
         db.add(db_obj)
@@ -30,7 +29,7 @@ class CRUDUser(CRUDBase[User, UserCreate, UserUpdate]):
         else:
             update_data = obj_in.model_dump(exclude_unset=True)
         if update_data["password"]:
-            hashed_password = update_data["password"] + 'hashed-password'
+            hashed_password = get_password_hash(update_data["password"])
             del update_data["password"]
             update_data["hashed-password"] = hashed_password
         return super().update(db, db_obj=db_obj, obj_in=update_data)
@@ -40,6 +39,14 @@ class CRUDUser(CRUDBase[User, UserCreate, UserUpdate]):
 
     def is_active(self, user: User):
         return user.is_active
+
+    def authenticate(self, db: Session, *, email: str, password: str):
+        user = self.get_by_email(db, email=email)
+        if not user:
+            return None
+        if not verify_password(password, user.hashed_password):
+            return None
+        return user
 
 
 user = CRUDUser(User)
