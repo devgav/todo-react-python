@@ -1,10 +1,11 @@
+import secrets
 from datetime import datetime, timedelta
 from typing import Any
 
 from jose import jwt
 from passlib.context import CryptContext
 
-from src.app.core.settings import Settings
+from src.app.core.settings import settings
 
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
@@ -19,14 +20,15 @@ def create_access_token(
         expire = datetime.utcnow() + expires_delta
     else:
         expire = datetime.utcnow() + timedelta(
-            minutes=Settings.ACCESS_TOKEN_EXPIRE_MINUTES
+            minutes=settings.ACCESS_TOKEN_EXPIRE_MINUTES
         )
     to_encode = {"exp": expire, "sub": str(subject)}
-    encoded_jwt = jwt.encode(to_encode, Settings.SECRET_KEY, algorithm=ALGORITHM)
+    encoded_jwt = jwt.encode(to_encode, settings.SECRET_KEY, algorithm=ALGORITHM)
     return encoded_jwt
 
 
 def verify_password(plain_password: str, hashed_password: str) -> bool:
+    print("THIS IS THE HASHED PASSWORD: ", hashed_password)
     return pwd_context.verify(plain_password, hashed_password)
 
 
