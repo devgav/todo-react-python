@@ -22,7 +22,6 @@ def get_multi_todos(
     Retrieves the todos of the current owner.
     params = skip
     """
-    print(current_user.id)
     return crud.todo.get_multi_by_owner(db=db, owner_id=current_user.id, skip=skip, limit=limit)
 
 
